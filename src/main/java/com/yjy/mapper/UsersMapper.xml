@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间，可以对sql进行分类的一个管理 -->
+<mapper namespace="com.yjy.mapper.UsersMapper">
+    <select id="findByUsername" parameterType="String" resultType="user">
+        select * from sys_user where username=#{0}
+    </select>
+    <insert id="insert" parameterType="user">
+        insert into sys_user(usercode,username,password,salt) values (#{usercode},#{username},#{password},#{salt})
+    </insert>
+    <select id="getCount" resultType="int">
+        select count(*) from sys_user
+    </select>
+    <select id="findAll"  resultType="user">
+        select * from sys_user
+    </select>
+    <select id="findPermission" resultType="permission">
+        select DISTINCT sys_permission.*
+        from sys_user,sys_role,sys_user_role,sys_permission,sys_role_permission
+        where sys_role.id=sys_user_role.sys_role_id
+          and sys_user.id=sys_user_role.sys_user_id
+          and sys_permission.id=sys_role_permission.sys_permission_id
+          and sys_role.id=sys_role_permission.sys_role_id
+          and sys_user.username=#{0}
+
+    </select>
+</mapper>

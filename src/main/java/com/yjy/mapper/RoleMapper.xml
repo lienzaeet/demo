@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间，可以对sql进行分类的一个管理 -->
+<mapper namespace="com.yjy.mapper.RoleMapper">
+    <insert id="insert" parameterType="int">
+        insert into sys_user_role(sys_user_id,sys_role_id) values (#{arg0},#{arg1})
+    </insert>
+    <select id="getCount" resultType="int">
+        select count(*) from sys_user_role
+    </select>
+    <select id="findAll"  resultType="role">
+        select * from sys_role
+    </select>
+    <select id="findrolebyid" parameterType="int" resultType="role">
+        SELECT sys_role.available,sys_user_role.id,sys_role.roledes,sys_role.rolename from sys_user_role,sys_role WHERE sys_role.id=sys_user_role.sys_role_id and sys_user_role.sys_user_id=#{0}
+    </select>
+    <delete id="delete" parameterType="int">
+        delete from sys_user_role where id=#{0}
+    </delete>
+    <select id="findroleother" parameterType="int" resultType="role">
+        SELECT sys_role.available,sys_role.id,sys_role.roledes,sys_role.rolename from sys_role WHERE sys_role.id not in(
+            select sys_user_role.sys_role_id
+            from sys_user_role
+            where sys_user_role.sys_user_id = #{0})
+    </select>
+</mapper>
